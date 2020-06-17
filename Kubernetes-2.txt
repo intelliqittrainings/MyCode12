@@ -1,0 +1,332 @@
+
+
+Defintion Files in Kuberetes
+===================================
+These are yml files that are used to create kubernetes objects
+These yml files contain 4 top level object
+
+apiVersion:
+kind:
+metadata:
+spec:
+
+apiVersion: This represents the code library or api that has to be used
+for working on a specific kubernetes object.
+
+kind: This represents the exact kubernetes object that we want to create
+like Pod,Replicas set,Service etc
+
+metadata: Here we provide additional info about the Kuberenetes object that
+we want to create.Like name,labels.In Labels key and value is our choice
+This Labels is used for performing group action
+
+spec:Here we provide actual info about the container,docker image,ports to
+be opened,environment variables etc
+
+UseCase 1
+Create a pod defintion file for starting an nginx container
+and name the container as webserver.This container should 
+run in a pod called nginx-pod,give some labels
+
+vim pod-definition1.yml
+
+To create pods from the above file
+kubectl create -f pod-defintion1.yml
+
+To see the list of pods create
+kubectl get pods -o wide
+
+To delete the pods created from the above file
+kubectl delete -f pod-defintion1.yml
+
+==================================================================
+UseCase 2
+Create a pod definition file for starting a posgrest container
+with a name mydb in a pod called postgre-pod.Also pass the necessary 
+environment variables
+
+UseCase 3
+Create a pod defintion file to start a jenkins container in a pod
+called jenkins-pod,also perform port mapping to access the jenkins
+from a browser
+
+
+
+=============================================================================
+ReplicationController
+=======================
+This is a high level Kubernets object that can be used for handling 
+multiple replicas of a Pod.Here we can perfrom Load Balancing
+and Scalling
+
+ReplicationController uses keys like "replicas,template" etc in the "spec" section
+In the template section we can give metadata related to the pod and also use
+another spec section where we can give containers information
+
+Create a replication controller for creating 3 replicas of httpd
+vim repilication-controller.yml
+
+To create the httpd replicas from the above file
+kubectl create -f replication-controller.yml
+
+To check if 3 pods are running an on whcih slaves they are running
+kubectl get pods -o wide
+
+To delete the replicas
+kubectl delete -f replication-controller.yml
+
+
+============================================================================
+
+ReplicaSet
+===================
+This is also similar to ReplicationController but it is more
+advanced and it can also handle load balancing and scalling
+It has an additional field in spec section called as "selector"
+This selector uses a child element "matchLabels" where the
+it will search for Pod based on a specific label name and try to add
+them to the cluster
+
+Create a replicaset file to start 4 tomcat replicas  and then perform scalling
+vim replica-set.yml
+
+To create the pods from the above file
+kubectl create -f replica-set.yml
+
+Scalling can be done in 2 ways
+a) Update the file and later scale it
+b) Scale from the coomand prompt withbout updating the defintion file
+
+a) Update the file and later scale it
+  Open the replicas-set.yml file and increase the replicas count from 4 to 6
+  kubectl replace -f replicas-set.yml
+  Check if 6 pods of tomcat are running
+  kubectl get pods
+
+b) Scale from the coomand prompt withbout updating the defintion file
+   kubectl scale --replicas=2 -f replica-set.yml
+
+
+Deployment
+================
+
+This is also a high level Kubernetes object which can be used for
+scalling and load balancing and it can also perfrom rolling update
+
+Create a deployment file to run nginx:1.7.9 with 3 replicas
+Later perform a rolling update to nginx:1.9.1
+
+vim deployment1.yml
+
+To create the deployment from the above file
+kubectl create -f deployment.yml
+
+To check if the deployment is running
+kubectl get deployment
+
+To see if all 3 pod of nginx are running
+kubectl get pod
+
+Check the version of nginx
+kubectl describe pods nginx-deployment | less       (nginx:1.7.9)
+
+Perform a rolling update to nginx:1.9.1
+kubectl --record deployment.apps/nginx-deployment set image                           deployment.v1.apps/nginx-deployment nginx=nginx:1.9.1
+
+To check if the update the has happened
+kubectl describe pods nginx-deployment | less      (nginx:1.9.1)
+
+
+
+
+docker compose + docker swarm = docker stack
+docker compose + Kubernetes = Kompose
+
+
+gcloud compute firewall-rules create mynetwork --allow tcp:9090 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
